@@ -11,6 +11,14 @@ def _normalize(text: str) -> str:
     return " ".join(re.findall(r"[\w]+", text.casefold(), flags=re.UNICODE))
 
 
+def _contains_phrase(text: str, phrase: str) -> bool:
+    """Return True when a normalized phrase appears on token boundaries."""
+
+    if not phrase:
+        return False
+    return re.search(rf"(?<!\w){re.escape(phrase)}(?!\w)", text) is not None
+
+
 def match_entity(item: NewsItem, entities: list[Entity]) -> MatchResult:
     """Match a news item to the strongest exact name or alias occurrence.
 
@@ -33,17 +41,17 @@ def match_entity(item: NewsItem, entities: list[Entity]) -> MatchResult:
             score = 0.0
             evidence: list[str] = []
 
-            if normalized_alias in title:
+            if _contains_phrase(title, normalized_alias):
                 score += 0.75
                 evidence.append("alias_in_title")
 
-            if normalized_alias in body:
+            if _contains_phrase(body, normalized_alias):
                 score += 0.20
                 evidence.append("alias_in_summary")
 
-            if entity.ticker and re.search(
-                rf"(?<!\w){re.escape(entity.ticker.casefold())}(?!\w)",
+            if entity.ticker and _contains_phrase(
                 f"{title} {body}",
+                _normalize(entity.ticker),
             ):
                 score += 0.05
                 evidence.append("ticker_match")
