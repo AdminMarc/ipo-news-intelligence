@@ -1,8 +1,10 @@
 # IPO News Intelligence
 
+[![tests](https://github.com/AdminMarc/ipo-news-intelligence/actions/workflows/tests.yml/badge.svg)](https://github.com/AdminMarc/ipo-news-intelligence/actions/workflows/tests.yml)
+
 Open-source toolkit for collecting, deduplicating and matching IPO-related news to companies and entities.
 
-> **Status:** early-stage / pre-alpha. The public API may change while the first stable data model and matching rules are developed.
+> **Status:** v0.1.x early development. The public API may still change while matching and feed-processing behavior is hardened.
 
 ## Why this project exists
 
